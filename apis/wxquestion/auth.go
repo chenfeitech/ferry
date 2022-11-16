@@ -6,6 +6,7 @@ import (
   "log"
   "net/http"
 
+  "ferry/pkg/authjwt"
   "ferry/pkg/service"
 
   "github.com/ArtisanCloud/PowerWeChat/v2/src/miniProgram/base/request"
@@ -13,6 +14,13 @@ import (
 )
 
 func APISNSSession(c *gin.Context) {
+  // {"openid":"otFFw5A6eLBUxQxmiUskp2lXVpNY","session_key":"RVLHimKLIauQ7jj4H2SRfA==","unionid":""}
+  type AuthInfo struct {
+		OpenID string `json:"openid"`
+		SessionKey string `json:"session_key"`
+    UnionID string `json:"unionid"`
+    Token string `json:"token"`
+	}
 
   code, exist := c.GetQuery("code")
   if !exist {
@@ -24,8 +32,20 @@ func APISNSSession(c *gin.Context) {
   if err != nil {
     panic(err)
   }
+  tokenString, err := authjwt.GenerateJWT(rs.OpenID, rs.SessionKey)
+	if err != nil {
+		// context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		panic(err)
+		return
+	}
 
-  c.JSON(http.StatusOK, rs)
+  var authoinfo AuthInfo
+  authoinfo.OpenID = rs.OpenID
+  authoinfo.SessionKey = rs.SessionKey
+  authoinfo.UnionID = rs.UnionID
+  authoinfo.Token = tokenString
+
+  c.JSON(http.StatusOK, authoinfo)
 
 }
 

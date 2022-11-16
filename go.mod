@@ -12,7 +12,7 @@ require (
 	github.com/go-kit/kit v0.8.0
 	github.com/go-ldap/ldap/v3 v3.2.3
 	github.com/go-sql-driver/mysql v1.5.0
-	github.com/golang-jwt/jwt v3.2.2+incompatible
+	github.com/golang-jwt/jwt/v4 v4.4.2
 	github.com/google/uuid v1.1.1
 	github.com/jinzhu/gorm v1.9.10
 	github.com/mojocn/base64Captcha v1.3.1

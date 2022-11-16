@@ -24,3 +24,4 @@ func AuthInit() (*jwt.GinJWTMiddleware, error) {
 	})
 
 }
+
