@@ -89,7 +89,7 @@ function prepare_check {
           6. 安装docker
 
 EOF
-    check_soft docker
+    # check_soft docker
     check_soft git
     check_soft go
     check_soft npm
@@ -242,8 +242,8 @@ function install_app() {
     prepare_check
     init
     get_variables
-    install_front
-    install_backend
+    # install_front
+    # install_backend
 }
 
 function start_backend {

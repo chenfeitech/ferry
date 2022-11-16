@@ -3,6 +3,7 @@ package gorm
 import (
 	"ferry/models/process"
 	"ferry/models/system"
+	"ferry/models/wxquestion"
 
 	"github.com/jinzhu/gorm"
 )
@@ -31,5 +32,8 @@ func AutoMigrate(db *gorm.DB) error {
 		new(process.Info),
 		new(process.History),
 		new(process.CirculationHistory),
+
+		// 微信小程序
+		new(wxquestion.Rank),
 	).Error
 }

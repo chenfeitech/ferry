@@ -14,6 +14,7 @@ var cfgDatabase *viper.Viper
 var cfgApplication *viper.Viper
 var cfgJwt *viper.Viper
 var cfgSsl *viper.Viper
+var cfgMp *viper.Viper
 
 //载入配置文件
 func ConfigSetup(path string) {
@@ -56,6 +57,13 @@ func ConfigSetup(path string) {
 		panic("config not found settings.ssl")
 	}
 	SslConfig = InitSsl(cfgSsl)
+
+	// InitMiniprogram 配置
+	cfgMp = viper.Sub("miniprogram")
+	if cfgMp == nil {
+		panic("config not found miniprogram")
+	}
+	MiniprogramConfig = InitMiniprogram(cfgMp)
 
 	// 日志配置
 	logger.Init()

@@ -23,3 +23,19 @@ func InitDatabase(cfg *viper.Viper) *Database {
 }
 
 var DatabaseConfig = new(Database)
+
+type Miniprogram struct {
+	Appid		string
+	Secret		string
+	Redisaddr	string
+}
+
+func InitMiniprogram(cfg *viper.Viper) *Miniprogram {
+	return &Miniprogram{
+		Appid:     cfg.GetString("appid"),
+		Secret:   cfg.GetString("secret"),
+		Redisaddr:     cfg.GetString("redisaddr"),
+	}
+}
+
+var MiniprogramConfig = new(Miniprogram)

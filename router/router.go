@@ -5,6 +5,7 @@ import (
 	"ferry/pkg/jwtauth"
 	"ferry/router/dashboard"
 	"ferry/router/process"
+	"ferry/router/wxquestion"
 	systemRouter "ferry/router/system"
 
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -74,4 +75,8 @@ func sysCheckRoleRouterInit(r *gin.RouterGroup, authMiddleware *jwtauth.GinJWTMi
 	process.RegisterTaskRouter(v1, authMiddleware)
 	process.RegisterTplRouter(v1, authMiddleware)
 	process.RegisterWorkOrderRouter(v1, authMiddleware)
+
+	// 微信小程序
+	wxquestion.RegisterRankRouter(v1, authMiddleware)
+	wxquestion.InitMiniProgramAPIRoutes(v1, authMiddleware)
 }

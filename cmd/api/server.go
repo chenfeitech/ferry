@@ -1,20 +1,22 @@
 package api
 
 import (
-	"context"
-	"ferry/database"
-	"ferry/global/orm"
-	"ferry/pkg/logger"
-	"ferry/pkg/task"
-	"ferry/router"
-	"ferry/tools"
-	config2 "ferry/tools/config"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+	"context"
+
+	"ferry/database"
+	"ferry/global/orm"
+	"ferry/pkg/logger"
+	"ferry/pkg/task"
+	"ferry/pkg/service"
+	"ferry/router"
+	"ferry/tools"
+	config2 "ferry/tools/config"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
@@ -80,6 +82,12 @@ func run() error {
 
 	if port != "" {
 		config2.SetConfig(config, "settings.application.port", port)
+	}
+	var err error
+	service.MiniProgramApp, err = service.NewMiniMiniProgramService(config2.MiniprogramConfig.Appid,
+		config2.MiniprogramConfig.Secret, config2.MiniprogramConfig.Redisaddr)
+	if err != nil || service.MiniProgramApp == nil {
+	  panic(err)
 	}
 
 	srv := &http.Server{

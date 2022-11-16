@@ -1,3 +1,7 @@
+miniprogram:
+  appid: wx236fa21f71f71e07
+  redisaddr: localhost:6379
+  secret: 0b32101c5b80b831ca6151ec09daaa55
 script:
   path: ./static/scripts
 settings:
@@ -12,9 +16,9 @@ settings:
     writertimeout: 2
   database:
     dbtype: mysql
-    host: ferry_mysql
+    host: localhost
     name: ferry
-    password: 123456
+    password: xu123456
     port: 3306
     username: root
   domain:
@@ -55,7 +59,7 @@ settings:
   public:
     islocation: 0
   redis:
-    url: redis://ferry_redis:6379
+    url: redis://localhost:6379
   ssl:
     key: keystring
     pem: temp/pem.pem
