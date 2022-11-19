@@ -53,9 +53,9 @@ func (e *Dept) Create() (Dept, error) {
 	} else {
 		deptPath = "/0" + deptPath
 	}
-	var mp = map[string]string{}
-	mp["deptPath"] = deptPath
-	if err := orm.Eloquent.Table(e.TableName()).Where("dept_id = ?", e.DeptId).Update(mp).Error; err != nil {
+	// var mp = map[string]string{}
+	// mp["deptPath"] = deptPath
+	if err := orm.Eloquent.Table(e.TableName()).Where("dept_id = ?", e.DeptId).Update("deptPath", deptPath).Error; err != nil {
 		err := result.Error
 		return doc, err
 	}

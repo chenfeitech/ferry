@@ -18,7 +18,7 @@ import (
 */
 
 type WorkOrder struct {
-	Classify int
+	Classify int64
 	GinObj   *gin.Context
 }
 
@@ -30,7 +30,7 @@ type workOrderInfo struct {
 	ProcessName  string `json:"process_name"`
 }
 
-func NewWorkOrder(classify int, c *gin.Context) *WorkOrder {
+func NewWorkOrder(classify int64, c *gin.Context) *WorkOrder {
 	return &WorkOrder{
 		Classify: classify,
 		GinObj:   c,
@@ -151,7 +151,7 @@ func (w *WorkOrder) WorkOrderList() (result interface{}, err error) {
 		principals        string
 		StateList         []map[string]interface{}
 		workOrderInfoList []workOrderInfo
-		minusTotal        int
+		minusTotal        int64
 	)
 
 	result, err = w.PureWorkOrderList()

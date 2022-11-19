@@ -89,7 +89,7 @@ func WorkOrderList(c *gin.Context) {
 
 	classifyInt, _ = strconv.Atoi(classify)
 	w := service.WorkOrder{
-		Classify: classifyInt,
+		Classify: int64(classifyInt),
 		GinObj:   c,
 	}
 	result, err = w.WorkOrderList()

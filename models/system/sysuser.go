@@ -197,10 +197,10 @@ func (e *SysUser) GetList() (SysUserView []SysUserView, err error) {
 	return
 }
 
-func (e *SysUser) GetPage(pageSize int, pageIndex int) ([]SysUserPage, int, error) {
+func (e *SysUser) GetPage(pageSize int, pageIndex int) ([]SysUserPage, int64, error) {
 	var (
 		doc   []SysUserPage
-		count int
+		count int64
 	)
 	table := orm.Eloquent.Select("sys_user.*,sys_dept.dept_name").Table(e.TableName())
 	table = table.Joins("left join sys_dept on sys_dept.dept_id = sys_user.dept_id")
@@ -228,7 +228,7 @@ func (e *SysUser) GetPage(pageSize int, pageIndex int) ([]SysUserPage, int, erro
 	if err := table.Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&doc).Error; err != nil {
 		return nil, 0, err
 	}
-	table.Where("sys_user.delete_time IS NULL").Count(&count)
+	count = table.Where("sys_user.delete_time IS NULL").RowsAffected
 	return doc, count, nil
 }
 
@@ -254,8 +254,8 @@ func (e SysUser) Insert() (id int, err error) {
 	}
 
 	// check 用户名
-	var count int
-	orm.Eloquent.Table(e.TableName()).Where("username = ? and `delete_time` IS NULL", e.Username).Count(&count)
+	var count int64
+	count = orm.Eloquent.Table(e.TableName()).Where("username = ? and `delete_time` IS NULL", e.Username).RowsAffected
 	if count > 0 {
 		err = errors.New("账户已存在！")
 		return

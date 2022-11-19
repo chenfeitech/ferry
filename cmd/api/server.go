@@ -74,7 +74,8 @@ func run() error {
 	r := router.InitRouter()
 
 	defer func() {
-		err := orm.Eloquent.Close()
+		sqlDB, err := orm.Eloquent.DB()
+		err = sqlDB.Close()
 		if err != nil {
 			logger.Error(err)
 		}

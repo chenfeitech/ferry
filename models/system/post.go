@@ -82,9 +82,9 @@ func (e *Post) GetList() ([]Post, error) {
 	return doc, nil
 }
 
-func (e *Post) GetPage(pageSize int, pageIndex int) ([]Post, int, error) {
+func (e *Post) GetPage(pageSize int, pageIndex int) ([]Post, int64, error) {
 	var (
-		count int
+		count int64
 		doc   []Post
 	)
 
@@ -105,7 +105,7 @@ func (e *Post) GetPage(pageSize int, pageIndex int) ([]Post, int, error) {
 	if err := table.Order("sort").Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&doc).Error; err != nil {
 		return nil, 0, err
 	}
-	table.Where("`delete_time` IS NULL").Count(&count)
+	count = table.Where("`delete_time` IS NULL").RowsAffected
 	return doc, count, nil
 }
 

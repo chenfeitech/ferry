@@ -1,7 +1,7 @@
 package orm
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 var Eloquent *gorm.DB

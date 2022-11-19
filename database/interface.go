@@ -1,8 +1,8 @@
 package database
 
-import "github.com/jinzhu/gorm"
+import "gorm.io/gorm"
 
 type Database interface {
-	Open(dbType string, conn string) (db *gorm.DB, err error)
+	Open(conn string) (db *gorm.DB, err error)
 	GetConnect() string
 }

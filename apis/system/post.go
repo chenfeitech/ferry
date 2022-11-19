@@ -49,7 +49,7 @@ func GetPostList(c *gin.Context) {
 		app.Error(c, -1, err, "")
 		return
 	}
-	app.PageOK(c, result, count, pageIndex, pageSize, "")
+	app.PageOK(c, result, int(count), pageIndex, pageSize, "")
 }
 
 // @Summary 获取字典数据

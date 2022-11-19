@@ -9,8 +9,8 @@ import (
 
 	"github.com/spf13/viper"
 
-	_ "github.com/go-sql-driver/mysql" //加载mysql
-	"github.com/jinzhu/gorm"
+	"gorm.io/driver/mysql" //加载mysql
+	"gorm.io/gorm"
 )
 
 var (
@@ -29,12 +29,12 @@ func (e *Mysql) Setup() {
 
 	db = new(Mysql)
 	orm.MysqlConn = db.GetConnect()
-	orm.Eloquent, err = db.Open(DbType, orm.MysqlConn)
+	orm.Eloquent, err = db.Open(orm.MysqlConn)
 
 	if err != nil {
-		logger.Fatalf("%s connect error %v", DbType, err)
+		logger.Fatalf("%s connect error %v", orm.MysqlConn, err)
 	} else {
-		logger.Infof("%s connect success!", DbType)
+		logger.Infof("%s connect success!", orm.MysqlConn)
 	}
 
 	if orm.Eloquent.Error != nil {
@@ -42,20 +42,20 @@ func (e *Mysql) Setup() {
 	}
 
 	// 是否开启详细日志记录
-	orm.Eloquent.LogMode(viper.GetBool("settings.gorm.logMode"))
-
+	// orm.Eloquent.LogMode(viper.GetBool("settings.gorm.logMode"))
+	sqlDB, err := orm.Eloquent.DB()
 	// 设置最大打开连接数
-	orm.Eloquent.DB().SetMaxOpenConns(viper.GetInt("settings.gorm.maxOpenConn"))
+	sqlDB.SetMaxOpenConns(viper.GetInt("settings.gorm.maxOpenConn"))
 
 	// 用于设置闲置的连接数.设置闲置的连接数则当开启的一个连接使用完成后可以放在池里等候下一次使用
-	orm.Eloquent.DB().SetMaxIdleConns(viper.GetInt("settings.gorm.maxIdleConn"))
+	sqlDB.SetMaxIdleConns(viper.GetInt("settings.gorm.maxIdleConn"))
 }
 
 type Mysql struct {
 }
 
-func (e *Mysql) Open(dbType string, conn string) (db *gorm.DB, err error) {
-	return gorm.Open(dbType, conn)
+func (e *Mysql) Open(conn string) (db *gorm.DB, err error) {
+	return gorm.Open(mysql.Open(conn), &gorm.Config{})
 }
 
 func (e *Mysql) GetConnect() string {

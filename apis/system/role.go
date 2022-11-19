@@ -49,7 +49,7 @@ func GetRoleList(c *gin.Context) {
 		return
 	}
 
-	app.PageOK(c, result, count, pageIndex, pageSize, "")
+	app.PageOK(c, result, int(count), pageIndex, pageSize, "")
 }
 
 // @Summary 获取Role数据

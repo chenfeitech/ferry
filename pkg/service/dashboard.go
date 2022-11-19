@@ -176,13 +176,13 @@ func (s *Statistics) SubmitRanking() (submitRankingData map[string][]interface{}
 }
 
 // 查询工单数量统计
-func (s *Statistics) WorkOrderCount(c *gin.Context) (countList map[string]int, err error) {
+func (s *Statistics) WorkOrderCount(c *gin.Context) (countList map[string]int64, err error) {
 	var (
 		w      *WorkOrder
 		result interface{}
 	)
-	countList = make(map[string]int)
-	for _, i := range []int{1, 2, 3, 4} {
+	countList = make(map[string]int64)
+	for _, i := range []int64{1, 2, 3, 4} {
 		w = NewWorkOrder(i, c)
 		if i != 1 {
 			result, err = w.PureWorkOrderList()

@@ -48,7 +48,7 @@ func (e *LoginLog) Get() (LoginLog, error) {
 	return doc, nil
 }
 
-func (e *LoginLog) GetPage(pageSize int, pageIndex int) ([]LoginLog, int, error) {
+func (e *LoginLog) GetPage(pageSize int, pageIndex int) ([]LoginLog, int64, error) {
 	var doc []LoginLog
 
 	table := orm.Eloquent.Select("*").Table(e.TableName())
@@ -62,12 +62,12 @@ func (e *LoginLog) GetPage(pageSize int, pageIndex int) ([]LoginLog, int, error)
 		table = table.Where("username like ?", "%"+e.Username+"%")
 	}
 
-	var count int
+	var count int64
 
 	if err := table.Order("info_id desc").Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&doc).Error; err != nil {
 		return nil, 0, err
 	}
-	table.Where("`delete_time` IS NULL").Count(&count)
+	count = table.Where("`delete_time` IS NULL").RowsAffected
 	return doc, count, nil
 }
 

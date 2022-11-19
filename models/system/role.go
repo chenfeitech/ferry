@@ -35,10 +35,10 @@ type MenuIdList struct {
 	MenuId int `json:"menuId"`
 }
 
-func (e *SysRole) GetPage(pageSize int, pageIndex int) ([]SysRole, int, error) {
+func (e *SysRole) GetPage(pageSize int, pageIndex int) ([]SysRole, int64, error) {
 	var (
 		doc   []SysRole
-		count int
+		count int64
 	)
 
 	table := orm.Eloquent.Select("*").Table("sys_role")
@@ -58,7 +58,7 @@ func (e *SysRole) GetPage(pageSize int, pageIndex int) ([]SysRole, int, error) {
 	if err := table.Order("role_sort").Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&doc).Error; err != nil {
 		return nil, 0, err
 	}
-	table.Where("`delete_time` IS NULL").Count(&count)
+	count = table.Where("`delete_time` IS NULL").RowsAffected
 	return doc, count, nil
 }
 
@@ -107,9 +107,10 @@ func (role *SysRole) GetRoleMeunId() ([]int, error) {
 }
 
 func (role *SysRole) Insert() (id int, err error) {
-	i := 0
-	orm.Eloquent.Table("sys_role").Where("(role_name = ? or role_key = ?) and `delete_time` IS NULL", role.RoleName, role.RoleKey).Count(&i)
-	if i > 0 {
+	var count int64
+	count = 0
+	count = orm.Eloquent.Table("sys_role").Where("(role_name = ? or role_key = ?) and `delete_time` IS NULL", role.RoleName, role.RoleKey).RowsAffected
+	if count > 0 {
 		return 0, errors.New("角色名称或者角色标识已经存在！")
 	}
 	role.UpdateBy = ""
